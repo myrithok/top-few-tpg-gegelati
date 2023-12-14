@@ -10,10 +10,9 @@ This project needs to be built and installed using cmake in order for the main p
 
 To install this project, execute these commands:
 ```
-$ git clone https://github.com/gegelati/gegelati.git
-$ cd gegelati/bin
+$ git clone https://github.com/myrithok/top-few-tpg-gegelati.git
+$ cd top-few-tpg-gegelati/bin
 $ cmake ..
-$ cmake --build . --target INSTALL # On Windows
-$ cmake --build . --target install # On Linux
+$ cmake --build . --target install
 ```
 If you encounter any installation issues, please see the original repository.
