@@ -123,7 +123,7 @@ namespace TPG {
          * \throw std::runtime_error in case the TPGTeam has no outgoing edge.
          * This should not happen in a correctly constructed TPGGraph.
          */
-        virtual const TPG::TPGEdge& evaluateTeam(const TPGTeam& team);
+        virtual const std::vector<std::reference_wrapper<TPG::TPGEdge>> evaluateTeam(const TPGTeam& team);
 
         /**
          * \brief Execute the TPGGraph starting from the given TPGVertex.

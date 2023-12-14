@@ -178,11 +178,13 @@ namespace Learn {
             while (!le.isTerminal() &&
                    nbActions < this->params.maxNbActionsPerEval) {
                 // Get the action
-                uint64_t actionID =
-                    ((const TPG::TPGAction*)tee.executeFromRoot(*root).back())
-                        ->getActionID();
+                std::vector<const TPG::TPGVertex*> actions = tee.executeFromRoot(*root);
+                std::vector<uint64_t> actionIDs;
+                actionIDs.push_back(((const TPG::TPGAction*)actions.back())->getActionID());
+                actionIDs.push_back(((const TPG::TPGAction*)actions.end()[-2])->getActionID());
+                actionIDs.push_back(((const TPG::TPGAction*)actions.end()[-3])->getActionID());
                 // Do it
-                le.doAction(actionID);
+                le.doAction(actionIDs);
                 // Count actions
                 nbActions++;
             }

@@ -47,9 +47,9 @@ bool Learn::LearningEnvironment::isCopyable() const
     return false;
 }
 
-void Learn::LearningEnvironment::doAction(uint64_t actionID)
+void Learn::LearningEnvironment::doAction(std::vector<uint64_t> actionID)
 {
-    if (actionID >= this->nbActions) {
+    if (actionID[0] >= this->nbActions) {
         throw std::runtime_error("Given action ID exceeds the number of "
                                  "actions for this learning environment.");
     }

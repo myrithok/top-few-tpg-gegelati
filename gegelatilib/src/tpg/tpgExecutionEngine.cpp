@@ -72,7 +72,7 @@ double TPG::TPGExecutionEngine::evaluateEdge(const TPGEdge& edge)
     return result;
 }
 
-const TPG::TPGEdge& TPG::TPGExecutionEngine::evaluateTeam(const TPGTeam& team)
+const std::vector<std::reference_wrapper<TPG::TPGEdge>> TPG::TPGExecutionEngine::evaluateTeam(const TPGTeam& team)
 {
     // Copy outgoing edge list
     const std::list<TPG::TPGEdge*>& outgoingEdges = team.getOutgoingEdges();
@@ -87,7 +87,11 @@ const TPG::TPGEdge& TPG::TPGExecutionEngine::evaluateTeam(const TPGTeam& team)
     // Evaluate all TPGEdge
     // First
     TPGEdge* bestEdge = *outgoingEdges.begin();
+    TPGEdge* secondEdge = *outgoingEdges.begin();
+    TPGEdge* thirdEdge = *outgoingEdges.begin();
     double bestBid = this->evaluateEdge(*bestEdge);
+    double secondBid = this->evaluateEdge(*bestEdge);
+    double thirdBid = this->evaluateEdge(*bestEdge);
 #ifdef DEBUG
     std::cout << "R = " << bestBid << "*" << std::endl;
 #endif
@@ -103,8 +107,22 @@ const TPG::TPGEdge& TPG::TPGExecutionEngine::evaluateTeam(const TPGTeam& team)
 #ifdef DEBUG
             std::cout << "*" << std::endl;
 #endif
+            thirdEdge = secondEdge;
+            thirdBid = secondBid;
+            secondEdge = bestEdge;
+            secondBid = bestBid;
             bestEdge = edge;
             bestBid = bid;
+        }
+        else if (bid >= secondBid) {
+            thirdEdge = secondEdge;
+            thirdBid = secondBid;
+            secondEdge = edge;
+            secondBid = bid;
+        }
+        else if (bid >= thirdBid) {
+            thirdEdge = edge;
+            thirdBid = bid;
         }
         else {
 #ifdef DEBUG
@@ -112,8 +130,11 @@ const TPG::TPGEdge& TPG::TPGExecutionEngine::evaluateTeam(const TPGTeam& team)
 #endif
         }
     }
-
-    return *bestEdge;
+    std::vector<std::reference_wrapper<TPG::TPGEdge>> results;
+    results.push_back(*bestEdge);
+    results.push_back(*secondEdge);
+    results.push_back(*thirdEdge);
+    return results;
 }
 
 const std::vector<const TPG::TPGVertex*> TPG::TPGExecutionEngine::
@@ -127,10 +148,14 @@ const std::vector<const TPG::TPGVertex*> TPG::TPGExecutionEngine::
     // Browse the TPG until a TPGAction is reached.
     while (dynamic_cast<const TPG::TPGTeam*>(currentVertex)) {
         // Get the next edge
-        const TPGEdge& edge =
+        const std::vector<std::reference_wrapper<TPG::TPGEdge>> edges =
             this->evaluateTeam(*(const TPGTeam*)currentVertex);
         // update currentVertex and backup in visitedVertex.
-        currentVertex = edge.getDestination();
+        currentVertex = edges.at(2).get().getDestination();
+        visitedVertices.push_back(currentVertex);
+        currentVertex = edges.at(1).get().getDestination();
+        visitedVertices.push_back(currentVertex);
+        currentVertex = edges.at(0).get().getDestination();
         visitedVertices.push_back(currentVertex);
     }
 

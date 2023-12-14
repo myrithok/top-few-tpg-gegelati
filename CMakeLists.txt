@@ -147,13 +147,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # find_package(YCM REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-### Options
-# Build test related commands?
-option(BUILD_TESTING "Create tests using CMake" ON)
-if(BUILD_TESTING)
-    enable_testing()
-endif()
-
 # Enable RPATH support for installed binaries and libraries
 include(AddInstallRPATHSupport)
 add_install_rpath_support(BIN_DIRS "${CMAKE_INSTALL_FULL_BINDIR}"
@@ -196,11 +189,6 @@ install_basic_package_files(${PROJECT_NAME}
                             NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 # Add the uninstall target
 include(AddUninstallTarget)
-
-# Add integration tests (unit tests for each library should be in each sublibrary directory).
-if(BUILD_TESTING)
-    add_subdirectory(test)
-endif()
 
 # Add targets related to doxygen documention generation
 add_subdirectory(doc)

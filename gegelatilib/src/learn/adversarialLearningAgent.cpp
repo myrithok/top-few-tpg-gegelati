@@ -151,13 +151,14 @@ std::shared_ptr<Learn::EvaluationResult> Learn::AdversarialLearningAgent::
         while (!ale.isTerminal() &&
                nbActions < this->params.maxNbActionsPerEval) {
             // Get the action
-            uint64_t actionID =
-                ((const TPG::TPGAction*)tee
-                     .executeFromRoot(*((const TPG::TPGTeam*)*rootsIterator))
-                     .back())
-                    ->getActionID();
+
+            std::vector<const TPG::TPGVertex*> actions = tee.executeFromRoot(*((const TPG::TPGTeam*)*rootsIterator));
+            std::vector<uint64_t> actionIDs;
+            actionIDs.push_back(((const TPG::TPGAction*)actions.back())->getActionID());
+            actionIDs.push_back(((const TPG::TPGAction*)actions.end()[-2])->getActionID());
+            actionIDs.push_back(((const TPG::TPGAction*)actions.end()[-3])->getActionID());
             // Do it
-            ale.doAction(actionID);
+            ale.doAction(actionIDs);
 
             rootsIterator++;
             if (rootsIterator == roots.end()) {

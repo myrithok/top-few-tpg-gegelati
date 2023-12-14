@@ -147,7 +147,7 @@ namespace Learn {
          * execute.
          * \throw std::runtime_error if the actionID exceeds nbActions - 1.
          */
-        virtual void doAction(uint64_t actionID);
+        virtual void doAction(std::vector<uint64_t> actionID);
 
         /**
          * \brief Reset the LearningEnvironment.

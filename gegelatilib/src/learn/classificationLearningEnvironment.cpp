@@ -38,13 +38,13 @@
 
 #include "learn/classificationLearningEnvironment.h"
 
-void Learn::ClassificationLearningEnvironment::doAction(uint64_t actionID)
+void Learn::ClassificationLearningEnvironment::doAction(std::vector<uint64_t> actionID)
 {
     // Base method
     LearningEnvironment::doAction(actionID);
 
     // Classification table update
-    this->classificationTable.at(this->currentClass).at(actionID)++;
+    this->classificationTable.at(this->currentClass).at(actionID[0])++;
 }
 
 const std::vector<std::vector<uint64_t>>& Learn::
